@@ -259,6 +259,27 @@ describe('JFrog CLI V2 URL Tests', () => {
     });
 });
 
+describe('logIfLatestDownloadedFromRemote', () => {
+    beforeEach(() => {
+        (core.info as jest.Mock).mockClear();
+    });
+
+    test('Logs info when latest is downloaded from a remote repository', () => {
+        Utils.logIfLatestDownloadedFromRemote(Utils.LATEST_CLI_VERSION, 'jfrog-cli-remote');
+        expect(core.info).toHaveBeenCalledWith(Utils.LATEST_FROM_REMOTE_INFO);
+    });
+
+    test('Does not log when version is pinned', () => {
+        Utils.logIfLatestDownloadedFromRemote('2.91.0', 'jfrog-cli-remote');
+        expect(core.info).not.toHaveBeenCalled();
+    });
+
+    test('Does not log when download-repository is unset', () => {
+        Utils.logIfLatestDownloadedFromRemote(Utils.LATEST_CLI_VERSION, '');
+        expect(core.info).not.toHaveBeenCalled();
+    });
+});
+
 test('Extract download details Tests', () => {
     for (let config of [V1_CONFIG, V2_CONFIG]) {
         process.env.JF_ENV_LOCAL = config;

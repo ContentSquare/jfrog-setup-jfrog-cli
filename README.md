@@ -289,6 +289,8 @@ It is also possible to set the latest JFrog CLI version by adding the _version_ 
       version: latest
 ```
 
+Do not combine `version: latest` with `download-repository`. See [Downloading JFrog CLI from Artifactory](#downloading-jfrog-cli-from-artifactory).
+
 | Important: Only JFrog CLI versions 1.46.4 or above are supported. |
 |-------------------------------------------------------------------|
 
@@ -417,10 +419,18 @@ In this example, each job builds and publishes a different service from the mono
 
 If your agent has no Internet access, you can configure the workflow to download JFrog CLI from a [remote repository](https://www.jfrog.com/confluence/display/JFROG/Remote+Repositories) in your JFrog Artifactory, which is configured to proxy the official download URL.
 
+> [!NOTE]
+> When `download-repository` is set, pin `version` to a concrete `X.Y.Z`.
+> `latest` is requested as Artifactory `[RELEASE]`. That token is for Maven, not a generic remote of `https://releases.jfrog.io/artifactory/jfrog-cli`.
+> You can get an old cached binary for this OS/arch, not the newest CLI.
+>
+> Air-gapped jobs: pin the version (or pre-cache that exact path).
+> Jobs that can reach the internet and want newest: omit `download-repository`.
+
 Here's how you do this:
 
 1. Create a remote repository in Artifactory. Name the repository jfrog-cli-remote and set its URL to https://releases.jfrog.io/artifactory/jfrog-cli/
-2. Set _download-repository_ input to jfrog-cli-remote:
+2. Set _download-repository_ input to jfrog-cli-remote and pin `version`:
 
     ```yml
     - uses: jfrog/setup-jfrog-cli@v4
@@ -430,6 +440,7 @@ Here's how you do this:
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
       with:
+          version: X.Y.Z
           download-repository: jfrog-cli-remote
     ```
 </details>

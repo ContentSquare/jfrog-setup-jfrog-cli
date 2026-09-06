@@ -421,10 +421,10 @@ If your agent has no Internet access, you can configure the workflow to download
 
 > [!NOTE]
 > When `download-repository` is set, pin `version` to a concrete `X.Y.Z`.
-> `latest` is requested as Artifactory `[RELEASE]`. That token is for Maven, not a generic remote of `https://releases.jfrog.io/artifactory/jfrog-cli`.
-> You can get an old cached binary for this OS/arch, not the newest CLI.
+> `latest` is requested as Artifactory `[RELEASE]`. That token is for Maven, not a generic repository.
+> A remote proxy can return an old cached binary for this OS/arch. A fully air-gapped local repository can only return a CLI version that its administrators imported.
 >
-> Air-gapped jobs: pin the version (or pre-cache that exact path).
+> Air-gapped jobs: import the required CLI and pin its version.
 > Jobs that can reach the internet and want newest: omit `download-repository`.
 
 Here's how you do this:

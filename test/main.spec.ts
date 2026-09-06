@@ -264,7 +264,7 @@ describe('logIfLatestDownloadedFromRemote', () => {
         (core.info as jest.Mock).mockClear();
     });
 
-    test('Logs info when latest is downloaded from a remote repository', () => {
+    test('Logs info when latest is downloaded from an Artifactory repository', () => {
         Utils.logIfLatestDownloadedFromRemote(Utils.LATEST_CLI_VERSION, 'jfrog-cli-remote');
         expect(core.info).toHaveBeenCalledWith(Utils.LATEST_FROM_REMOTE_INFO);
     });

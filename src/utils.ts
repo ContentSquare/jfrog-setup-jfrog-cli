@@ -30,9 +30,9 @@ export class Utils {
     public static readonly LATEST_CLI_VERSION: string = 'latest';
     // The value in the download URL to set to get the latest version
     private static readonly LATEST_RELEASE_VERSION: string = '[RELEASE]';
-    // Logged when version=latest is downloaded through an Artifactory remote (generic [RELEASE] is not newest-on-origin)
+    // Logged when version=latest is downloaded through an Artifactory repository (generic [RELEASE] is not newest-on-origin)
     public static readonly LATEST_FROM_REMOTE_INFO: string =
-        'download-repository is set with version=latest. The CLI is fetched as Artifactory [RELEASE] on a generic remote, which can return an old cached binary for this OS/arch instead of the newest CLI. Pin version to X.Y.Z, or omit download-repository if the runner can reach releases.jfrog.io.';
+        'download-repository is set with version=latest. The CLI is fetched as Artifactory [RELEASE] from a generic repository, which can return an old available or cached binary for this OS/arch instead of the newest CLI. Pin version to X.Y.Z, or omit download-repository if the runner can reach releases.jfrog.io.';
     // Placeholder CLI version to use to keep 'latest' in cache.
     public static readonly LATEST_SEMVER: string = '100.100.100';
     // The default server id name for separate env config
@@ -204,8 +204,8 @@ export class Utils {
     }
 
     /**
-     * Log when latest is resolved through an Artifactory remote.
-     * Generic remotes do not treat [RELEASE] as newest-on-origin; pin a concrete version instead.
+     * Log when latest is resolved through an Artifactory repository.
+     * Generic repositories do not treat [RELEASE] as newest-on-origin; pin a concrete version instead.
      */
     public static logIfLatestDownloadedFromRemote(version: string, cliRemote: string): void {
         if (cliRemote && version === Utils.LATEST_CLI_VERSION) {

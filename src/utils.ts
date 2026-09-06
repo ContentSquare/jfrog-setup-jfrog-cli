@@ -32,7 +32,7 @@ export class Utils {
     private static readonly LATEST_RELEASE_VERSION: string = '[RELEASE]';
     // Logged when version=latest is downloaded through a remote repository, which caches the literal [RELEASE] path
     public static readonly LATEST_FROM_REMOTE_INFO: string =
-        'download-repository is set with version=latest, so the CLI is requested from the path v2/[RELEASE]. A remote repository caches whatever it resolved under that exact path, so the first version downloaded through it stays in place until the cache is revalidated, which may never happen. Pin version to X.Y.Z, or omit download-repository if the runner can reach releases.jfrog.io.';
+        'download-repository is set with version=latest, so the CLI is requested from the path v2/[RELEASE]. If that repository stores artifacts locally, the binary cached under this path is not expirable metadata, so the first version resolved through it can keep being served as latest. Use a concrete version to get a per-version cache path, or omit download-repository if the runner can reach releases.jfrog.io.';
     // Placeholder CLI version to use to keep 'latest' in cache.
     public static readonly LATEST_SEMVER: string = '100.100.100';
     // The default server id name for separate env config

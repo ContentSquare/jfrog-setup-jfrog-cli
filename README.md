@@ -420,9 +420,9 @@ In this example, each job builds and publishes a different service from the mono
 If your agent has no Internet access, you can configure the workflow to download JFrog CLI from a [remote repository](https://www.jfrog.com/confluence/display/JFROG/Remote+Repositories) in your JFrog Artifactory, which is configured to proxy the official download URL.
 
 > [!NOTE]
-> When `download-repository` is set, pin `version` to a concrete `X.Y.Z`.
+> With `download-repository`, prefer a concrete `version: X.Y.Z` over `latest`.
 >
-> `latest` is requested as `[RELEASE]`, which is part of the artifact path (`v2/[RELEASE]/...`). A remote repository caches whatever it resolved under that exact path, so the first version downloaded through it keeps being served as `latest` until the cache is revalidated — which may never happen. Caching works well for a concrete version such as `2.123.0`; it does not work for a moving tag.
+> `latest` is requested as `[RELEASE]`, which is part of the artifact path (`v2/[RELEASE]/jfrog-cli-.../jfrog`). If the remote repository has **Store Artifacts Locally** enabled (the default), the binary it resolved is cached under that literal path. Artifactory expires cached *metadata* files such as `maven-metadata.xml`, and a CLI binary is not one of them, so the first version resolved through the repository can keep being served as `latest`. Zapping the cache does not help either, because it invalidates metadata and not binaries. A concrete version avoids this: each version is cached under its own immutable path.
 >
 > Jobs that can reach the internet and want the newest CLI: omit `download-repository`.
 

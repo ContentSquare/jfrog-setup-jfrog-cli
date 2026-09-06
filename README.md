@@ -422,7 +422,7 @@ If your agent has no Internet access, you can configure the workflow to download
 > [!NOTE]
 > With `download-repository`, prefer a concrete `version: X.Y.Z` over `latest`.
 >
-> `latest` is requested as `[RELEASE]`, which is part of the artifact path (`v2/[RELEASE]/jfrog-cli-.../jfrog`). If the remote repository has **Store Artifacts Locally** enabled (the default), the binary it resolved is cached under that literal path. Artifactory expires cached *metadata* files such as `maven-metadata.xml`, and a CLI binary is not one of them, so the first version resolved through the repository can keep being served as `latest`. Zapping the cache does not help either, because it invalidates metadata and not binaries. A concrete version avoids this: each version is cached under its own immutable path.
+> `latest` is not resolved to a version number. It becomes the literal path segment `[RELEASE]` in the download URL (`v2/[RELEASE]/jfrog-cli-.../jfrog`), and a generic repository serves that path like any other. If the repository has **Store Artifacts Locally** enabled (the default), the binary returned for that path is cached under it, so later runs can keep receiving that same binary instead of a newer CLI. A concrete version avoids this, because every version has its own immutable path.
 >
 > Jobs that can reach the internet and want the newest CLI: omit `download-repository`.
 

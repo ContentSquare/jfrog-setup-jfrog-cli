@@ -421,11 +421,10 @@ If your agent has no Internet access, you can configure the workflow to download
 
 > [!NOTE]
 > When `download-repository` is set, pin `version` to a concrete `X.Y.Z`.
-> `latest` is requested as Artifactory `[RELEASE]`. That token is for Maven, not a generic repository.
-> A remote proxy can return an old cached binary for this OS/arch. A fully air-gapped local repository can only return a CLI version that its administrators imported.
 >
-> Air-gapped jobs: import the required CLI and pin its version.
-> Jobs that can reach the internet and want newest: omit `download-repository`.
+> `latest` is requested as `[RELEASE]`, which is part of the artifact path (`v2/[RELEASE]/...`). A remote repository caches whatever it resolved under that exact path, so the first version downloaded through it keeps being served as `latest` until the cache is revalidated — which may never happen. Caching works well for a concrete version such as `2.123.0`; it does not work for a moving tag.
+>
+> Jobs that can reach the internet and want the newest CLI: omit `download-repository`.
 
 Here's how you do this:
 

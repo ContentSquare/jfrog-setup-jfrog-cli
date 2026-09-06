@@ -7,7 +7,7 @@ inputs:
         default: "2.91.0"
         required: false
     download-repository:
-        description: "Artifactory repository containing JFrog CLI, such as a remote pointing to 'https://releases.jfrog.io/artifactory/jfrog-cli' or a manually populated air-gap repository. Pin version to X.Y.Z; latest maps to [RELEASE] and can return an old available or cached binary from a generic repository."
+        description: "Remote repository in Artifactory pointing to 'https://releases.jfrog.io/artifactory/jfrog-cli'. Use this parameter in case you don't have an Internet access. Pin version to X.Y.Z; latest is requested as the path v2/[RELEASE], and the repository caches that path, so it keeps serving the first version it resolved."
         required: false
     oidc-provider-name:
         description: "Provider Name's value that was set in OpenId Connect integration in the JFrog platform."

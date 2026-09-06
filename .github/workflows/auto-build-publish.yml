@@ -22,14 +22,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # macos omitted: local Artifactory bootstrap on GitHub-hosted macOS has been
-        # broken since macos-latest moved to macOS 15 (first red 2025-09-02; jobs hit
-        # the 1200s local-rt-setup wait then exit 1). Same skip as jfrog-cli (JGC-413).
-        os: [ ubuntu, windows ]
+        os: [ ubuntu, windows, macos ]
         cli-version: [ "latest", "2.66.0" ]
     runs-on: ${{ matrix.os }}-latest
     steps:
+      - name: Skip macOS - JGC-413
+        if: matrix.os == 'macos'
+        run: |
+          echo "::warning::JGC-413 - Skip until artifactory bootstrap in osx is fixed"
+          exit 0
+
       - name: Checkout Repository
+        if: matrix.os != 'macos'
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -38,16 +42,19 @@ jobs:
       # reads go.mod when go-version is unset (#28), which fails Setup Go immediately.
       # local-rt-setup (used by install-local-artifactory) requires Go 1.24+.
       - name: Setup Go with cache
+        if: matrix.os != 'macos'
         uses: jfrog/.github/actions/install-go-with-cache@main
         with:
           go-version: "1.24"
 
       - name: Install local Artifactory
+        if: matrix.os != 'macos'
         uses: jfrog/.github/actions/install-local-artifactory@main
         with:
           RTLIC: ${{ secrets.RTLIC }}
 
       - name: Post Step to Test the Auto Build-Publish post step
+        if: matrix.os != 'macos'
         uses: gacts/run-and-post-run@v1
         with:
           post: |
@@ -65,6 +72,7 @@ jobs:
             fi
 
       - name: Setup JFrog CLI
+        if: matrix.os != 'macos'
         id: setup-jfrog-cli
         uses: ./
         with:
@@ -75,6 +83,7 @@ jobs:
           JF_PASSWORD: password
 
       - name: Create NPM Remote Repository JSON
+        if: matrix.os != 'macos'
         uses: jsdaniell/create-json@v1.2.3
         with:
           name: "npm-remote-template.json"
@@ -86,10 +95,12 @@ jobs:
           }'
 
       - name: Configure Artifactory NPM Remote Repository
+        if: matrix.os != 'macos'
         run: jf rt repo-create npm-remote-template.json
         shell: bash
 
       - name: Add npm modules to local build-info
+        if: matrix.os != 'macos'
         run: |
           jf npm-config --repo-resolve npm-remote
           jf npm install

@@ -289,7 +289,7 @@ It is also possible to set the latest JFrog CLI version by adding the _version_ 
       version: latest
 ```
 
-Do not combine `version: latest` with `download-repository`. See [Downloading JFrog CLI from Artifactory](#downloading-jfrog-cli-from-artifactory).
+With `download-repository`, prefer a concrete `version: X.Y.Z` over `latest`. See [Downloading JFrog CLI from Artifactory](#downloading-jfrog-cli-from-artifactory).
 
 | Important: Only JFrog CLI versions 1.46.4 or above are supported. |
 |-------------------------------------------------------------------|
